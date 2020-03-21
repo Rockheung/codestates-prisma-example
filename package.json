@@ -1,0 +1,28 @@
+{
+  "name": "codestates-prisma-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "postinstall": "curl https://launchpadlibrarian.net/24493586/employees_db-full-1.0.6.tar.bz2 --output employees_db-full.tar.bz2 && tar -xvjf employees_db-full.tar.bz2",
+    "start": "dotenv -- node app.js",
+    "db:start": "dotenv -- docker-compose up -d",
+    "db:kill": "dotenv -- docker-compose down && rm -rf .mysql",
+    "db:migration": "dotenv -- prisma deploy",
+    "db:load": "dotenv -- bash -c 'mysql -h 127.0.0.1 -P $DB_PORT -u root -p$DB_PASS < employees_db/employees.sql'",
+    "token": "dotenv -- prisma token",
+    "token:dev": "dotenv -- prisma cluster-token"
+  },
+  "keywords": [],
+  "author": "Rockheung",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv-cli": "^3.1.0",
+    "nodemon": "^2.0.2",
+    "prisma": "^1.34.10"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "prisma-binding": "^2.3.16"
+  }
+}
