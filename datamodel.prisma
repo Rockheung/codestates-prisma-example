@@ -1,0 +1,51 @@
+type Department @db(name: "departments") {
+  dept_no: ID! @id
+  deptName: String! @db(name: "dept_name") @unique
+  deptEmp: [DeptEmp!]!
+}
+
+type DeptEmp @db(name: "dept_emp") {
+  id: Int! @id
+  deptNo: Department! @db(name: "dept_no") @relation(link: INLINE)
+  empNo: Employee! @db(name: "emp_no") @relation(link: INLINE)
+  fromDate: DateTime! @db(name: "from_date")
+  toDate: DateTime! @db(name: "to_date")
+}
+
+type DeptManager @db(name: "dept_manager") {
+  id: Int! @id
+  deptNo: Department! @db(name: "dept_no") @relation(link: INLINE)
+  empNo: Employee! @db(name: "emp_no") @relation(link: INLINE)
+  fromDate: DateTime! @db(name: "from_date")
+  toDate: DateTime! @db(name: "to_date")
+}
+
+type Employee @db(name: "employees") {
+  emp_no: Int! @id
+  birthDate: DateTime! @db(name: "birth_date")
+  firstName: String! @db(name: "first_name")
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime! @db(name: "hire_date")
+  lastName: String! @db(name: "last_name")
+}
+
+enum EmployeesGenderEnum {
+  F
+  M
+}
+
+type Salary @db(name: "salaries") {
+  id: Int! @id
+  empNo: Employee! @db(name: "emp_no") @relation(link: INLINE)
+  fromDate: DateTime! @db(name: "from_date")
+  salary: Int!
+  toDate: DateTime! @db(name: "to_date")
+}
+
+type Title @db(name: "titles") {
+  id: Int! @id
+  empNo: Employee! @db(name: "emp_no") @relation(link: INLINE)
+  fromDate: DateTime! @db(name: "from_date")
+  title: String!
+  toDate: DateTime @db(name: "to_date")
+}

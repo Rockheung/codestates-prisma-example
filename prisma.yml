@@ -8,6 +8,6 @@ generate:
   - generator: graphql-schema
     output: ./generated/prisma.graphql
 
-hooks:
-  post-deploy:
-    graphql codegen --project database
+# hooks:
+#   post-deploy:
+#     graphql codegen --project database

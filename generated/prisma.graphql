@@ -1,0 +1,994 @@
+type AggregateDepartment {
+  count: Int!
+}
+
+type AggregateDeptEmp {
+  count: Int!
+}
+
+type AggregateDeptManager {
+  count: Int!
+}
+
+type AggregateEmployee {
+  count: Int!
+}
+
+type AggregateSalary {
+  count: Int!
+}
+
+type AggregateTitle {
+  count: Int!
+}
+
+type BatchPayload {
+  count: Long!
+}
+
+scalar DateTime
+
+type Department {
+  dept_no: ID!
+  deptName: String!
+  deptEmp(where: DeptEmpWhereInput, orderBy: DeptEmpOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DeptEmp!]
+}
+
+type DepartmentConnection {
+  pageInfo: PageInfo!
+  edges: [DepartmentEdge]!
+  aggregate: AggregateDepartment!
+}
+
+input DepartmentCreateInput {
+  dept_no: ID
+  deptName: String!
+  deptEmp: DeptEmpCreateManyWithoutDeptNoInput
+}
+
+input DepartmentCreateOneInput {
+  create: DepartmentCreateInput
+  connect: DepartmentWhereUniqueInput
+}
+
+input DepartmentCreateOneWithoutDeptEmpInput {
+  create: DepartmentCreateWithoutDeptEmpInput
+  connect: DepartmentWhereUniqueInput
+}
+
+input DepartmentCreateWithoutDeptEmpInput {
+  dept_no: ID
+  deptName: String!
+}
+
+type DepartmentEdge {
+  node: Department!
+  cursor: String!
+}
+
+enum DepartmentOrderByInput {
+  dept_no_ASC
+  dept_no_DESC
+  deptName_ASC
+  deptName_DESC
+}
+
+type DepartmentPreviousValues {
+  dept_no: ID!
+  deptName: String!
+}
+
+type DepartmentSubscriptionPayload {
+  mutation: MutationType!
+  node: Department
+  updatedFields: [String!]
+  previousValues: DepartmentPreviousValues
+}
+
+input DepartmentSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: DepartmentWhereInput
+  AND: [DepartmentSubscriptionWhereInput!]
+  OR: [DepartmentSubscriptionWhereInput!]
+  NOT: [DepartmentSubscriptionWhereInput!]
+}
+
+input DepartmentUpdateDataInput {
+  deptName: String
+  deptEmp: DeptEmpUpdateManyWithoutDeptNoInput
+}
+
+input DepartmentUpdateInput {
+  deptName: String
+  deptEmp: DeptEmpUpdateManyWithoutDeptNoInput
+}
+
+input DepartmentUpdateManyMutationInput {
+  deptName: String
+}
+
+input DepartmentUpdateOneRequiredInput {
+  create: DepartmentCreateInput
+  update: DepartmentUpdateDataInput
+  upsert: DepartmentUpsertNestedInput
+  connect: DepartmentWhereUniqueInput
+}
+
+input DepartmentUpdateOneRequiredWithoutDeptEmpInput {
+  create: DepartmentCreateWithoutDeptEmpInput
+  update: DepartmentUpdateWithoutDeptEmpDataInput
+  upsert: DepartmentUpsertWithoutDeptEmpInput
+  connect: DepartmentWhereUniqueInput
+}
+
+input DepartmentUpdateWithoutDeptEmpDataInput {
+  deptName: String
+}
+
+input DepartmentUpsertNestedInput {
+  update: DepartmentUpdateDataInput!
+  create: DepartmentCreateInput!
+}
+
+input DepartmentUpsertWithoutDeptEmpInput {
+  update: DepartmentUpdateWithoutDeptEmpDataInput!
+  create: DepartmentCreateWithoutDeptEmpInput!
+}
+
+input DepartmentWhereInput {
+  dept_no: ID
+  dept_no_not: ID
+  dept_no_in: [ID!]
+  dept_no_not_in: [ID!]
+  dept_no_lt: ID
+  dept_no_lte: ID
+  dept_no_gt: ID
+  dept_no_gte: ID
+  dept_no_contains: ID
+  dept_no_not_contains: ID
+  dept_no_starts_with: ID
+  dept_no_not_starts_with: ID
+  dept_no_ends_with: ID
+  dept_no_not_ends_with: ID
+  deptName: String
+  deptName_not: String
+  deptName_in: [String!]
+  deptName_not_in: [String!]
+  deptName_lt: String
+  deptName_lte: String
+  deptName_gt: String
+  deptName_gte: String
+  deptName_contains: String
+  deptName_not_contains: String
+  deptName_starts_with: String
+  deptName_not_starts_with: String
+  deptName_ends_with: String
+  deptName_not_ends_with: String
+  deptEmp_every: DeptEmpWhereInput
+  deptEmp_some: DeptEmpWhereInput
+  deptEmp_none: DeptEmpWhereInput
+  AND: [DepartmentWhereInput!]
+  OR: [DepartmentWhereInput!]
+  NOT: [DepartmentWhereInput!]
+}
+
+input DepartmentWhereUniqueInput {
+  dept_no: ID
+  deptName: String
+}
+
+type DeptEmp {
+  id: Int!
+  deptNo: Department!
+  empNo: Employee!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+type DeptEmpConnection {
+  pageInfo: PageInfo!
+  edges: [DeptEmpEdge]!
+  aggregate: AggregateDeptEmp!
+}
+
+input DeptEmpCreateInput {
+  id: Int
+  deptNo: DepartmentCreateOneWithoutDeptEmpInput!
+  empNo: EmployeeCreateOneInput!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+input DeptEmpCreateManyWithoutDeptNoInput {
+  create: [DeptEmpCreateWithoutDeptNoInput!]
+  connect: [DeptEmpWhereUniqueInput!]
+}
+
+input DeptEmpCreateWithoutDeptNoInput {
+  id: Int
+  empNo: EmployeeCreateOneInput!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+type DeptEmpEdge {
+  node: DeptEmp!
+  cursor: String!
+}
+
+enum DeptEmpOrderByInput {
+  id_ASC
+  id_DESC
+  fromDate_ASC
+  fromDate_DESC
+  toDate_ASC
+  toDate_DESC
+}
+
+type DeptEmpPreviousValues {
+  id: Int!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+input DeptEmpScalarWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  fromDate: DateTime
+  fromDate_not: DateTime
+  fromDate_in: [DateTime!]
+  fromDate_not_in: [DateTime!]
+  fromDate_lt: DateTime
+  fromDate_lte: DateTime
+  fromDate_gt: DateTime
+  fromDate_gte: DateTime
+  toDate: DateTime
+  toDate_not: DateTime
+  toDate_in: [DateTime!]
+  toDate_not_in: [DateTime!]
+  toDate_lt: DateTime
+  toDate_lte: DateTime
+  toDate_gt: DateTime
+  toDate_gte: DateTime
+  AND: [DeptEmpScalarWhereInput!]
+  OR: [DeptEmpScalarWhereInput!]
+  NOT: [DeptEmpScalarWhereInput!]
+}
+
+type DeptEmpSubscriptionPayload {
+  mutation: MutationType!
+  node: DeptEmp
+  updatedFields: [String!]
+  previousValues: DeptEmpPreviousValues
+}
+
+input DeptEmpSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: DeptEmpWhereInput
+  AND: [DeptEmpSubscriptionWhereInput!]
+  OR: [DeptEmpSubscriptionWhereInput!]
+  NOT: [DeptEmpSubscriptionWhereInput!]
+}
+
+input DeptEmpUpdateInput {
+  deptNo: DepartmentUpdateOneRequiredWithoutDeptEmpInput
+  empNo: EmployeeUpdateOneRequiredInput
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptEmpUpdateManyDataInput {
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptEmpUpdateManyMutationInput {
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptEmpUpdateManyWithoutDeptNoInput {
+  create: [DeptEmpCreateWithoutDeptNoInput!]
+  delete: [DeptEmpWhereUniqueInput!]
+  connect: [DeptEmpWhereUniqueInput!]
+  set: [DeptEmpWhereUniqueInput!]
+  disconnect: [DeptEmpWhereUniqueInput!]
+  update: [DeptEmpUpdateWithWhereUniqueWithoutDeptNoInput!]
+  upsert: [DeptEmpUpsertWithWhereUniqueWithoutDeptNoInput!]
+  deleteMany: [DeptEmpScalarWhereInput!]
+  updateMany: [DeptEmpUpdateManyWithWhereNestedInput!]
+}
+
+input DeptEmpUpdateManyWithWhereNestedInput {
+  where: DeptEmpScalarWhereInput!
+  data: DeptEmpUpdateManyDataInput!
+}
+
+input DeptEmpUpdateWithoutDeptNoDataInput {
+  empNo: EmployeeUpdateOneRequiredInput
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptEmpUpdateWithWhereUniqueWithoutDeptNoInput {
+  where: DeptEmpWhereUniqueInput!
+  data: DeptEmpUpdateWithoutDeptNoDataInput!
+}
+
+input DeptEmpUpsertWithWhereUniqueWithoutDeptNoInput {
+  where: DeptEmpWhereUniqueInput!
+  update: DeptEmpUpdateWithoutDeptNoDataInput!
+  create: DeptEmpCreateWithoutDeptNoInput!
+}
+
+input DeptEmpWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  deptNo: DepartmentWhereInput
+  empNo: EmployeeWhereInput
+  fromDate: DateTime
+  fromDate_not: DateTime
+  fromDate_in: [DateTime!]
+  fromDate_not_in: [DateTime!]
+  fromDate_lt: DateTime
+  fromDate_lte: DateTime
+  fromDate_gt: DateTime
+  fromDate_gte: DateTime
+  toDate: DateTime
+  toDate_not: DateTime
+  toDate_in: [DateTime!]
+  toDate_not_in: [DateTime!]
+  toDate_lt: DateTime
+  toDate_lte: DateTime
+  toDate_gt: DateTime
+  toDate_gte: DateTime
+  AND: [DeptEmpWhereInput!]
+  OR: [DeptEmpWhereInput!]
+  NOT: [DeptEmpWhereInput!]
+}
+
+input DeptEmpWhereUniqueInput {
+  id: Int
+}
+
+type DeptManager {
+  id: Int!
+  deptNo: Department!
+  empNo: Employee!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+type DeptManagerConnection {
+  pageInfo: PageInfo!
+  edges: [DeptManagerEdge]!
+  aggregate: AggregateDeptManager!
+}
+
+input DeptManagerCreateInput {
+  id: Int
+  deptNo: DepartmentCreateOneInput!
+  empNo: EmployeeCreateOneInput!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+type DeptManagerEdge {
+  node: DeptManager!
+  cursor: String!
+}
+
+enum DeptManagerOrderByInput {
+  id_ASC
+  id_DESC
+  fromDate_ASC
+  fromDate_DESC
+  toDate_ASC
+  toDate_DESC
+}
+
+type DeptManagerPreviousValues {
+  id: Int!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+type DeptManagerSubscriptionPayload {
+  mutation: MutationType!
+  node: DeptManager
+  updatedFields: [String!]
+  previousValues: DeptManagerPreviousValues
+}
+
+input DeptManagerSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: DeptManagerWhereInput
+  AND: [DeptManagerSubscriptionWhereInput!]
+  OR: [DeptManagerSubscriptionWhereInput!]
+  NOT: [DeptManagerSubscriptionWhereInput!]
+}
+
+input DeptManagerUpdateInput {
+  deptNo: DepartmentUpdateOneRequiredInput
+  empNo: EmployeeUpdateOneRequiredInput
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptManagerUpdateManyMutationInput {
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptManagerWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  deptNo: DepartmentWhereInput
+  empNo: EmployeeWhereInput
+  fromDate: DateTime
+  fromDate_not: DateTime
+  fromDate_in: [DateTime!]
+  fromDate_not_in: [DateTime!]
+  fromDate_lt: DateTime
+  fromDate_lte: DateTime
+  fromDate_gt: DateTime
+  fromDate_gte: DateTime
+  toDate: DateTime
+  toDate_not: DateTime
+  toDate_in: [DateTime!]
+  toDate_not_in: [DateTime!]
+  toDate_lt: DateTime
+  toDate_lte: DateTime
+  toDate_gt: DateTime
+  toDate_gte: DateTime
+  AND: [DeptManagerWhereInput!]
+  OR: [DeptManagerWhereInput!]
+  NOT: [DeptManagerWhereInput!]
+}
+
+input DeptManagerWhereUniqueInput {
+  id: Int
+}
+
+type Employee {
+  emp_no: Int!
+  birthDate: DateTime!
+  firstName: String!
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime!
+  lastName: String!
+}
+
+type EmployeeConnection {
+  pageInfo: PageInfo!
+  edges: [EmployeeEdge]!
+  aggregate: AggregateEmployee!
+}
+
+input EmployeeCreateInput {
+  emp_no: Int
+  birthDate: DateTime!
+  firstName: String!
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime!
+  lastName: String!
+}
+
+input EmployeeCreateOneInput {
+  create: EmployeeCreateInput
+  connect: EmployeeWhereUniqueInput
+}
+
+type EmployeeEdge {
+  node: Employee!
+  cursor: String!
+}
+
+enum EmployeeOrderByInput {
+  emp_no_ASC
+  emp_no_DESC
+  birthDate_ASC
+  birthDate_DESC
+  firstName_ASC
+  firstName_DESC
+  gender_ASC
+  gender_DESC
+  hireDate_ASC
+  hireDate_DESC
+  lastName_ASC
+  lastName_DESC
+}
+
+type EmployeePreviousValues {
+  emp_no: Int!
+  birthDate: DateTime!
+  firstName: String!
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime!
+  lastName: String!
+}
+
+enum EmployeesGenderEnum {
+  F
+  M
+}
+
+type EmployeeSubscriptionPayload {
+  mutation: MutationType!
+  node: Employee
+  updatedFields: [String!]
+  previousValues: EmployeePreviousValues
+}
+
+input EmployeeSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: EmployeeWhereInput
+  AND: [EmployeeSubscriptionWhereInput!]
+  OR: [EmployeeSubscriptionWhereInput!]
+  NOT: [EmployeeSubscriptionWhereInput!]
+}
+
+input EmployeeUpdateDataInput {
+  birthDate: DateTime
+  firstName: String
+  gender: EmployeesGenderEnum
+  hireDate: DateTime
+  lastName: String
+}
+
+input EmployeeUpdateInput {
+  birthDate: DateTime
+  firstName: String
+  gender: EmployeesGenderEnum
+  hireDate: DateTime
+  lastName: String
+}
+
+input EmployeeUpdateManyMutationInput {
+  birthDate: DateTime
+  firstName: String
+  gender: EmployeesGenderEnum
+  hireDate: DateTime
+  lastName: String
+}
+
+input EmployeeUpdateOneRequiredInput {
+  create: EmployeeCreateInput
+  update: EmployeeUpdateDataInput
+  upsert: EmployeeUpsertNestedInput
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeUpsertNestedInput {
+  update: EmployeeUpdateDataInput!
+  create: EmployeeCreateInput!
+}
+
+input EmployeeWhereInput {
+  emp_no: Int
+  emp_no_not: Int
+  emp_no_in: [Int!]
+  emp_no_not_in: [Int!]
+  emp_no_lt: Int
+  emp_no_lte: Int
+  emp_no_gt: Int
+  emp_no_gte: Int
+  birthDate: DateTime
+  birthDate_not: DateTime
+  birthDate_in: [DateTime!]
+  birthDate_not_in: [DateTime!]
+  birthDate_lt: DateTime
+  birthDate_lte: DateTime
+  birthDate_gt: DateTime
+  birthDate_gte: DateTime
+  firstName: String
+  firstName_not: String
+  firstName_in: [String!]
+  firstName_not_in: [String!]
+  firstName_lt: String
+  firstName_lte: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_contains: String
+  firstName_not_contains: String
+  firstName_starts_with: String
+  firstName_not_starts_with: String
+  firstName_ends_with: String
+  firstName_not_ends_with: String
+  gender: EmployeesGenderEnum
+  gender_not: EmployeesGenderEnum
+  gender_in: [EmployeesGenderEnum!]
+  gender_not_in: [EmployeesGenderEnum!]
+  hireDate: DateTime
+  hireDate_not: DateTime
+  hireDate_in: [DateTime!]
+  hireDate_not_in: [DateTime!]
+  hireDate_lt: DateTime
+  hireDate_lte: DateTime
+  hireDate_gt: DateTime
+  hireDate_gte: DateTime
+  lastName: String
+  lastName_not: String
+  lastName_in: [String!]
+  lastName_not_in: [String!]
+  lastName_lt: String
+  lastName_lte: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_contains: String
+  lastName_not_contains: String
+  lastName_starts_with: String
+  lastName_not_starts_with: String
+  lastName_ends_with: String
+  lastName_not_ends_with: String
+  AND: [EmployeeWhereInput!]
+  OR: [EmployeeWhereInput!]
+  NOT: [EmployeeWhereInput!]
+}
+
+input EmployeeWhereUniqueInput {
+  emp_no: Int
+}
+
+scalar Long
+
+type Mutation {
+  createDepartment(data: DepartmentCreateInput!): Department!
+  updateDepartment(data: DepartmentUpdateInput!, where: DepartmentWhereUniqueInput!): Department
+  updateManyDepartments(data: DepartmentUpdateManyMutationInput!, where: DepartmentWhereInput): BatchPayload!
+  upsertDepartment(where: DepartmentWhereUniqueInput!, create: DepartmentCreateInput!, update: DepartmentUpdateInput!): Department!
+  deleteDepartment(where: DepartmentWhereUniqueInput!): Department
+  deleteManyDepartments(where: DepartmentWhereInput): BatchPayload!
+  createDeptEmp(data: DeptEmpCreateInput!): DeptEmp!
+  updateDeptEmp(data: DeptEmpUpdateInput!, where: DeptEmpWhereUniqueInput!): DeptEmp
+  updateManyDeptEmps(data: DeptEmpUpdateManyMutationInput!, where: DeptEmpWhereInput): BatchPayload!
+  upsertDeptEmp(where: DeptEmpWhereUniqueInput!, create: DeptEmpCreateInput!, update: DeptEmpUpdateInput!): DeptEmp!
+  deleteDeptEmp(where: DeptEmpWhereUniqueInput!): DeptEmp
+  deleteManyDeptEmps(where: DeptEmpWhereInput): BatchPayload!
+  createDeptManager(data: DeptManagerCreateInput!): DeptManager!
+  updateDeptManager(data: DeptManagerUpdateInput!, where: DeptManagerWhereUniqueInput!): DeptManager
+  updateManyDeptManagers(data: DeptManagerUpdateManyMutationInput!, where: DeptManagerWhereInput): BatchPayload!
+  upsertDeptManager(where: DeptManagerWhereUniqueInput!, create: DeptManagerCreateInput!, update: DeptManagerUpdateInput!): DeptManager!
+  deleteDeptManager(where: DeptManagerWhereUniqueInput!): DeptManager
+  deleteManyDeptManagers(where: DeptManagerWhereInput): BatchPayload!
+  createEmployee(data: EmployeeCreateInput!): Employee!
+  updateEmployee(data: EmployeeUpdateInput!, where: EmployeeWhereUniqueInput!): Employee
+  updateManyEmployees(data: EmployeeUpdateManyMutationInput!, where: EmployeeWhereInput): BatchPayload!
+  upsertEmployee(where: EmployeeWhereUniqueInput!, create: EmployeeCreateInput!, update: EmployeeUpdateInput!): Employee!
+  deleteEmployee(where: EmployeeWhereUniqueInput!): Employee
+  deleteManyEmployees(where: EmployeeWhereInput): BatchPayload!
+  createSalary(data: SalaryCreateInput!): Salary!
+  updateSalary(data: SalaryUpdateInput!, where: SalaryWhereUniqueInput!): Salary
+  updateManySalaries(data: SalaryUpdateManyMutationInput!, where: SalaryWhereInput): BatchPayload!
+  upsertSalary(where: SalaryWhereUniqueInput!, create: SalaryCreateInput!, update: SalaryUpdateInput!): Salary!
+  deleteSalary(where: SalaryWhereUniqueInput!): Salary
+  deleteManySalaries(where: SalaryWhereInput): BatchPayload!
+  createTitle(data: TitleCreateInput!): Title!
+  updateTitle(data: TitleUpdateInput!, where: TitleWhereUniqueInput!): Title
+  updateManyTitles(data: TitleUpdateManyMutationInput!, where: TitleWhereInput): BatchPayload!
+  upsertTitle(where: TitleWhereUniqueInput!, create: TitleCreateInput!, update: TitleUpdateInput!): Title!
+  deleteTitle(where: TitleWhereUniqueInput!): Title
+  deleteManyTitles(where: TitleWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Query {
+  department(where: DepartmentWhereUniqueInput!): Department
+  departments(where: DepartmentWhereInput, orderBy: DepartmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Department]!
+  departmentsConnection(where: DepartmentWhereInput, orderBy: DepartmentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DepartmentConnection!
+  deptEmp(where: DeptEmpWhereUniqueInput!): DeptEmp
+  deptEmps(where: DeptEmpWhereInput, orderBy: DeptEmpOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DeptEmp]!
+  deptEmpsConnection(where: DeptEmpWhereInput, orderBy: DeptEmpOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DeptEmpConnection!
+  deptManager(where: DeptManagerWhereUniqueInput!): DeptManager
+  deptManagers(where: DeptManagerWhereInput, orderBy: DeptManagerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DeptManager]!
+  deptManagersConnection(where: DeptManagerWhereInput, orderBy: DeptManagerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DeptManagerConnection!
+  employee(where: EmployeeWhereUniqueInput!): Employee
+  employees(where: EmployeeWhereInput, orderBy: EmployeeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Employee]!
+  employeesConnection(where: EmployeeWhereInput, orderBy: EmployeeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EmployeeConnection!
+  salary(where: SalaryWhereUniqueInput!): Salary
+  salaries(where: SalaryWhereInput, orderBy: SalaryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Salary]!
+  salariesConnection(where: SalaryWhereInput, orderBy: SalaryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SalaryConnection!
+  title(where: TitleWhereUniqueInput!): Title
+  titles(where: TitleWhereInput, orderBy: TitleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Title]!
+  titlesConnection(where: TitleWhereInput, orderBy: TitleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TitleConnection!
+  node(id: ID!): Node
+}
+
+type Salary {
+  id: Int!
+  empNo: Employee!
+  fromDate: DateTime!
+  salary: Int!
+  toDate: DateTime!
+}
+
+type SalaryConnection {
+  pageInfo: PageInfo!
+  edges: [SalaryEdge]!
+  aggregate: AggregateSalary!
+}
+
+input SalaryCreateInput {
+  id: Int
+  empNo: EmployeeCreateOneInput!
+  fromDate: DateTime!
+  salary: Int!
+  toDate: DateTime!
+}
+
+type SalaryEdge {
+  node: Salary!
+  cursor: String!
+}
+
+enum SalaryOrderByInput {
+  id_ASC
+  id_DESC
+  fromDate_ASC
+  fromDate_DESC
+  salary_ASC
+  salary_DESC
+  toDate_ASC
+  toDate_DESC
+}
+
+type SalaryPreviousValues {
+  id: Int!
+  fromDate: DateTime!
+  salary: Int!
+  toDate: DateTime!
+}
+
+type SalarySubscriptionPayload {
+  mutation: MutationType!
+  node: Salary
+  updatedFields: [String!]
+  previousValues: SalaryPreviousValues
+}
+
+input SalarySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SalaryWhereInput
+  AND: [SalarySubscriptionWhereInput!]
+  OR: [SalarySubscriptionWhereInput!]
+  NOT: [SalarySubscriptionWhereInput!]
+}
+
+input SalaryUpdateInput {
+  empNo: EmployeeUpdateOneRequiredInput
+  fromDate: DateTime
+  salary: Int
+  toDate: DateTime
+}
+
+input SalaryUpdateManyMutationInput {
+  fromDate: DateTime
+  salary: Int
+  toDate: DateTime
+}
+
+input SalaryWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  empNo: EmployeeWhereInput
+  fromDate: DateTime
+  fromDate_not: DateTime
+  fromDate_in: [DateTime!]
+  fromDate_not_in: [DateTime!]
+  fromDate_lt: DateTime
+  fromDate_lte: DateTime
+  fromDate_gt: DateTime
+  fromDate_gte: DateTime
+  salary: Int
+  salary_not: Int
+  salary_in: [Int!]
+  salary_not_in: [Int!]
+  salary_lt: Int
+  salary_lte: Int
+  salary_gt: Int
+  salary_gte: Int
+  toDate: DateTime
+  toDate_not: DateTime
+  toDate_in: [DateTime!]
+  toDate_not_in: [DateTime!]
+  toDate_lt: DateTime
+  toDate_lte: DateTime
+  toDate_gt: DateTime
+  toDate_gte: DateTime
+  AND: [SalaryWhereInput!]
+  OR: [SalaryWhereInput!]
+  NOT: [SalaryWhereInput!]
+}
+
+input SalaryWhereUniqueInput {
+  id: Int
+}
+
+type Subscription {
+  department(where: DepartmentSubscriptionWhereInput): DepartmentSubscriptionPayload
+  deptEmp(where: DeptEmpSubscriptionWhereInput): DeptEmpSubscriptionPayload
+  deptManager(where: DeptManagerSubscriptionWhereInput): DeptManagerSubscriptionPayload
+  employee(where: EmployeeSubscriptionWhereInput): EmployeeSubscriptionPayload
+  salary(where: SalarySubscriptionWhereInput): SalarySubscriptionPayload
+  title(where: TitleSubscriptionWhereInput): TitleSubscriptionPayload
+}
+
+type Title {
+  id: Int!
+  empNo: Employee!
+  fromDate: DateTime!
+  title: String!
+  toDate: DateTime
+}
+
+type TitleConnection {
+  pageInfo: PageInfo!
+  edges: [TitleEdge]!
+  aggregate: AggregateTitle!
+}
+
+input TitleCreateInput {
+  id: Int
+  empNo: EmployeeCreateOneInput!
+  fromDate: DateTime!
+  title: String!
+  toDate: DateTime
+}
+
+type TitleEdge {
+  node: Title!
+  cursor: String!
+}
+
+enum TitleOrderByInput {
+  id_ASC
+  id_DESC
+  fromDate_ASC
+  fromDate_DESC
+  title_ASC
+  title_DESC
+  toDate_ASC
+  toDate_DESC
+}
+
+type TitlePreviousValues {
+  id: Int!
+  fromDate: DateTime!
+  title: String!
+  toDate: DateTime
+}
+
+type TitleSubscriptionPayload {
+  mutation: MutationType!
+  node: Title
+  updatedFields: [String!]
+  previousValues: TitlePreviousValues
+}
+
+input TitleSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TitleWhereInput
+  AND: [TitleSubscriptionWhereInput!]
+  OR: [TitleSubscriptionWhereInput!]
+  NOT: [TitleSubscriptionWhereInput!]
+}
+
+input TitleUpdateInput {
+  empNo: EmployeeUpdateOneRequiredInput
+  fromDate: DateTime
+  title: String
+  toDate: DateTime
+}
+
+input TitleUpdateManyMutationInput {
+  fromDate: DateTime
+  title: String
+  toDate: DateTime
+}
+
+input TitleWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  empNo: EmployeeWhereInput
+  fromDate: DateTime
+  fromDate_not: DateTime
+  fromDate_in: [DateTime!]
+  fromDate_not_in: [DateTime!]
+  fromDate_lt: DateTime
+  fromDate_lte: DateTime
+  fromDate_gt: DateTime
+  fromDate_gte: DateTime
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  toDate: DateTime
+  toDate_not: DateTime
+  toDate_in: [DateTime!]
+  toDate_not_in: [DateTime!]
+  toDate_lt: DateTime
+  toDate_lte: DateTime
+  toDate_gt: DateTime
+  toDate_gte: DateTime
+  AND: [TitleWhereInput!]
+  OR: [TitleWhereInput!]
+  NOT: [TitleWhereInput!]
+}
+
+input TitleWhereUniqueInput {
+  id: Int
+}

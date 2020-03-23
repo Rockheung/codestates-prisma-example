@@ -1,4 +1,5 @@
 node_modules
+.tmp
 .mysql
 employees_db-full.tar.bz2
 employees_db

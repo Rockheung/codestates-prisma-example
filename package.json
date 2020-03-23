@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "postinstall": "curl https://launchpadlibrarian.net/24493586/employees_db-full-1.0.6.tar.bz2 --output employees_db-full.tar.bz2 && tar -xvjf employees_db-full.tar.bz2",
+    "postinstall": "bash preinstall.sh",
     "start": "dotenv -- node app.js",
     "db:start": "dotenv -- docker-compose up -d",
     "db:kill": "dotenv -- docker-compose down && rm -rf .mysql",
