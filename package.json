@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "prisma-binding": "^2.3.16"
+    "prisma-binding": "^2.3.16",
+    "zongji": "^0.5.1"
   }
 }

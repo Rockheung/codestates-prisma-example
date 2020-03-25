@@ -29,6 +29,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASS}
     volumes:
       - ./.mysql:/var/lib/mysql
-    command: [ "--server-id=1", "--log-bin=/var/lib/mysql/mysql-bin.log", "--binlog-format=row", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--max-allowed-packet=16M"]
+      - ./.logs:/var/log/mysql
+    command: [ "--server-id=1", "--log-bin=/var/lib/mysql/mysql-bin.log", "--binlog-format=row", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--max-allowed-packet=16M", "--general-log=1", "--general-log-file=/var/log/mysql/general-log.log"]
 # volumes:
 #   mysql:

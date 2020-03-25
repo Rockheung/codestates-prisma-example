@@ -2,6 +2,7 @@ type Department @db(name: "departments") {
   dept_no: ID! @id
   deptName: String! @db(name: "dept_name") @unique
   deptEmp: [DeptEmp!]!
+  deptManagers: [DeptManager!]!
 }
 
 type DeptEmp @db(name: "dept_emp") {
@@ -23,10 +24,14 @@ type DeptManager @db(name: "dept_manager") {
 type Employee @db(name: "employees") {
   emp_no: Int! @id
   birthDate: DateTime! @db(name: "birth_date")
-  firstName: String! @db(name: "first_name")
+  firstName: String! @db(name: "first_name")  
   gender: EmployeesGenderEnum!
   hireDate: DateTime! @db(name: "hire_date")
   lastName: String! @db(name: "last_name")
+  deptEmp: [DeptEmp!]!
+  deptManagers: [DeptManager!]!
+  salaries: [Salary!]!
+  titles: [Title!]!
 }
 
 enum EmployeesGenderEnum {

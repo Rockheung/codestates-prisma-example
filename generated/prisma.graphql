@@ -32,6 +32,7 @@ type Department {
   dept_no: ID!
   deptName: String!
   deptEmp(where: DeptEmpWhereInput, orderBy: DeptEmpOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DeptEmp!]
+  deptManagers(where: DeptManagerWhereInput, orderBy: DeptManagerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DeptManager!]
 }
 
 type DepartmentConnection {
@@ -44,11 +45,7 @@ input DepartmentCreateInput {
   dept_no: ID
   deptName: String!
   deptEmp: DeptEmpCreateManyWithoutDeptNoInput
-}
-
-input DepartmentCreateOneInput {
-  create: DepartmentCreateInput
-  connect: DepartmentWhereUniqueInput
+  deptManagers: DeptManagerCreateManyWithoutDeptNoInput
 }
 
 input DepartmentCreateOneWithoutDeptEmpInput {
@@ -56,9 +53,21 @@ input DepartmentCreateOneWithoutDeptEmpInput {
   connect: DepartmentWhereUniqueInput
 }
 
+input DepartmentCreateOneWithoutDeptManagersInput {
+  create: DepartmentCreateWithoutDeptManagersInput
+  connect: DepartmentWhereUniqueInput
+}
+
 input DepartmentCreateWithoutDeptEmpInput {
   dept_no: ID
   deptName: String!
+  deptManagers: DeptManagerCreateManyWithoutDeptNoInput
+}
+
+input DepartmentCreateWithoutDeptManagersInput {
+  dept_no: ID
+  deptName: String!
+  deptEmp: DeptEmpCreateManyWithoutDeptNoInput
 }
 
 type DepartmentEdge {
@@ -96,25 +105,14 @@ input DepartmentSubscriptionWhereInput {
   NOT: [DepartmentSubscriptionWhereInput!]
 }
 
-input DepartmentUpdateDataInput {
-  deptName: String
-  deptEmp: DeptEmpUpdateManyWithoutDeptNoInput
-}
-
 input DepartmentUpdateInput {
   deptName: String
   deptEmp: DeptEmpUpdateManyWithoutDeptNoInput
+  deptManagers: DeptManagerUpdateManyWithoutDeptNoInput
 }
 
 input DepartmentUpdateManyMutationInput {
   deptName: String
-}
-
-input DepartmentUpdateOneRequiredInput {
-  create: DepartmentCreateInput
-  update: DepartmentUpdateDataInput
-  upsert: DepartmentUpsertNestedInput
-  connect: DepartmentWhereUniqueInput
 }
 
 input DepartmentUpdateOneRequiredWithoutDeptEmpInput {
@@ -124,18 +122,31 @@ input DepartmentUpdateOneRequiredWithoutDeptEmpInput {
   connect: DepartmentWhereUniqueInput
 }
 
-input DepartmentUpdateWithoutDeptEmpDataInput {
-  deptName: String
+input DepartmentUpdateOneRequiredWithoutDeptManagersInput {
+  create: DepartmentCreateWithoutDeptManagersInput
+  update: DepartmentUpdateWithoutDeptManagersDataInput
+  upsert: DepartmentUpsertWithoutDeptManagersInput
+  connect: DepartmentWhereUniqueInput
 }
 
-input DepartmentUpsertNestedInput {
-  update: DepartmentUpdateDataInput!
-  create: DepartmentCreateInput!
+input DepartmentUpdateWithoutDeptEmpDataInput {
+  deptName: String
+  deptManagers: DeptManagerUpdateManyWithoutDeptNoInput
+}
+
+input DepartmentUpdateWithoutDeptManagersDataInput {
+  deptName: String
+  deptEmp: DeptEmpUpdateManyWithoutDeptNoInput
 }
 
 input DepartmentUpsertWithoutDeptEmpInput {
   update: DepartmentUpdateWithoutDeptEmpDataInput!
   create: DepartmentCreateWithoutDeptEmpInput!
+}
+
+input DepartmentUpsertWithoutDeptManagersInput {
+  update: DepartmentUpdateWithoutDeptManagersDataInput!
+  create: DepartmentCreateWithoutDeptManagersInput!
 }
 
 input DepartmentWhereInput {
@@ -170,6 +181,9 @@ input DepartmentWhereInput {
   deptEmp_every: DeptEmpWhereInput
   deptEmp_some: DeptEmpWhereInput
   deptEmp_none: DeptEmpWhereInput
+  deptManagers_every: DeptManagerWhereInput
+  deptManagers_some: DeptManagerWhereInput
+  deptManagers_none: DeptManagerWhereInput
   AND: [DepartmentWhereInput!]
   OR: [DepartmentWhereInput!]
   NOT: [DepartmentWhereInput!]
@@ -197,7 +211,7 @@ type DeptEmpConnection {
 input DeptEmpCreateInput {
   id: Int
   deptNo: DepartmentCreateOneWithoutDeptEmpInput!
-  empNo: EmployeeCreateOneInput!
+  empNo: EmployeeCreateOneWithoutDeptEmpInput!
   fromDate: DateTime!
   toDate: DateTime!
 }
@@ -207,9 +221,21 @@ input DeptEmpCreateManyWithoutDeptNoInput {
   connect: [DeptEmpWhereUniqueInput!]
 }
 
+input DeptEmpCreateManyWithoutEmpNoInput {
+  create: [DeptEmpCreateWithoutEmpNoInput!]
+  connect: [DeptEmpWhereUniqueInput!]
+}
+
 input DeptEmpCreateWithoutDeptNoInput {
   id: Int
-  empNo: EmployeeCreateOneInput!
+  empNo: EmployeeCreateOneWithoutDeptEmpInput!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+input DeptEmpCreateWithoutEmpNoInput {
+  id: Int
+  deptNo: DepartmentCreateOneWithoutDeptEmpInput!
   fromDate: DateTime!
   toDate: DateTime!
 }
@@ -284,7 +310,7 @@ input DeptEmpSubscriptionWhereInput {
 
 input DeptEmpUpdateInput {
   deptNo: DepartmentUpdateOneRequiredWithoutDeptEmpInput
-  empNo: EmployeeUpdateOneRequiredInput
+  empNo: EmployeeUpdateOneRequiredWithoutDeptEmpInput
   fromDate: DateTime
   toDate: DateTime
 }
@@ -311,13 +337,31 @@ input DeptEmpUpdateManyWithoutDeptNoInput {
   updateMany: [DeptEmpUpdateManyWithWhereNestedInput!]
 }
 
+input DeptEmpUpdateManyWithoutEmpNoInput {
+  create: [DeptEmpCreateWithoutEmpNoInput!]
+  delete: [DeptEmpWhereUniqueInput!]
+  connect: [DeptEmpWhereUniqueInput!]
+  set: [DeptEmpWhereUniqueInput!]
+  disconnect: [DeptEmpWhereUniqueInput!]
+  update: [DeptEmpUpdateWithWhereUniqueWithoutEmpNoInput!]
+  upsert: [DeptEmpUpsertWithWhereUniqueWithoutEmpNoInput!]
+  deleteMany: [DeptEmpScalarWhereInput!]
+  updateMany: [DeptEmpUpdateManyWithWhereNestedInput!]
+}
+
 input DeptEmpUpdateManyWithWhereNestedInput {
   where: DeptEmpScalarWhereInput!
   data: DeptEmpUpdateManyDataInput!
 }
 
 input DeptEmpUpdateWithoutDeptNoDataInput {
-  empNo: EmployeeUpdateOneRequiredInput
+  empNo: EmployeeUpdateOneRequiredWithoutDeptEmpInput
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptEmpUpdateWithoutEmpNoDataInput {
+  deptNo: DepartmentUpdateOneRequiredWithoutDeptEmpInput
   fromDate: DateTime
   toDate: DateTime
 }
@@ -327,10 +371,21 @@ input DeptEmpUpdateWithWhereUniqueWithoutDeptNoInput {
   data: DeptEmpUpdateWithoutDeptNoDataInput!
 }
 
+input DeptEmpUpdateWithWhereUniqueWithoutEmpNoInput {
+  where: DeptEmpWhereUniqueInput!
+  data: DeptEmpUpdateWithoutEmpNoDataInput!
+}
+
 input DeptEmpUpsertWithWhereUniqueWithoutDeptNoInput {
   where: DeptEmpWhereUniqueInput!
   update: DeptEmpUpdateWithoutDeptNoDataInput!
   create: DeptEmpCreateWithoutDeptNoInput!
+}
+
+input DeptEmpUpsertWithWhereUniqueWithoutEmpNoInput {
+  where: DeptEmpWhereUniqueInput!
+  update: DeptEmpUpdateWithoutEmpNoDataInput!
+  create: DeptEmpCreateWithoutEmpNoInput!
 }
 
 input DeptEmpWhereInput {
@@ -385,8 +440,32 @@ type DeptManagerConnection {
 
 input DeptManagerCreateInput {
   id: Int
-  deptNo: DepartmentCreateOneInput!
-  empNo: EmployeeCreateOneInput!
+  deptNo: DepartmentCreateOneWithoutDeptManagersInput!
+  empNo: EmployeeCreateOneWithoutDeptManagersInput!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+input DeptManagerCreateManyWithoutDeptNoInput {
+  create: [DeptManagerCreateWithoutDeptNoInput!]
+  connect: [DeptManagerWhereUniqueInput!]
+}
+
+input DeptManagerCreateManyWithoutEmpNoInput {
+  create: [DeptManagerCreateWithoutEmpNoInput!]
+  connect: [DeptManagerWhereUniqueInput!]
+}
+
+input DeptManagerCreateWithoutDeptNoInput {
+  id: Int
+  empNo: EmployeeCreateOneWithoutDeptManagersInput!
+  fromDate: DateTime!
+  toDate: DateTime!
+}
+
+input DeptManagerCreateWithoutEmpNoInput {
+  id: Int
+  deptNo: DepartmentCreateOneWithoutDeptManagersInput!
   fromDate: DateTime!
   toDate: DateTime!
 }
@@ -411,6 +490,36 @@ type DeptManagerPreviousValues {
   toDate: DateTime!
 }
 
+input DeptManagerScalarWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  fromDate: DateTime
+  fromDate_not: DateTime
+  fromDate_in: [DateTime!]
+  fromDate_not_in: [DateTime!]
+  fromDate_lt: DateTime
+  fromDate_lte: DateTime
+  fromDate_gt: DateTime
+  fromDate_gte: DateTime
+  toDate: DateTime
+  toDate_not: DateTime
+  toDate_in: [DateTime!]
+  toDate_not_in: [DateTime!]
+  toDate_lt: DateTime
+  toDate_lte: DateTime
+  toDate_gt: DateTime
+  toDate_gte: DateTime
+  AND: [DeptManagerScalarWhereInput!]
+  OR: [DeptManagerScalarWhereInput!]
+  NOT: [DeptManagerScalarWhereInput!]
+}
+
 type DeptManagerSubscriptionPayload {
   mutation: MutationType!
   node: DeptManager
@@ -430,8 +539,13 @@ input DeptManagerSubscriptionWhereInput {
 }
 
 input DeptManagerUpdateInput {
-  deptNo: DepartmentUpdateOneRequiredInput
-  empNo: EmployeeUpdateOneRequiredInput
+  deptNo: DepartmentUpdateOneRequiredWithoutDeptManagersInput
+  empNo: EmployeeUpdateOneRequiredWithoutDeptManagersInput
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptManagerUpdateManyDataInput {
   fromDate: DateTime
   toDate: DateTime
 }
@@ -439,6 +553,69 @@ input DeptManagerUpdateInput {
 input DeptManagerUpdateManyMutationInput {
   fromDate: DateTime
   toDate: DateTime
+}
+
+input DeptManagerUpdateManyWithoutDeptNoInput {
+  create: [DeptManagerCreateWithoutDeptNoInput!]
+  delete: [DeptManagerWhereUniqueInput!]
+  connect: [DeptManagerWhereUniqueInput!]
+  set: [DeptManagerWhereUniqueInput!]
+  disconnect: [DeptManagerWhereUniqueInput!]
+  update: [DeptManagerUpdateWithWhereUniqueWithoutDeptNoInput!]
+  upsert: [DeptManagerUpsertWithWhereUniqueWithoutDeptNoInput!]
+  deleteMany: [DeptManagerScalarWhereInput!]
+  updateMany: [DeptManagerUpdateManyWithWhereNestedInput!]
+}
+
+input DeptManagerUpdateManyWithoutEmpNoInput {
+  create: [DeptManagerCreateWithoutEmpNoInput!]
+  delete: [DeptManagerWhereUniqueInput!]
+  connect: [DeptManagerWhereUniqueInput!]
+  set: [DeptManagerWhereUniqueInput!]
+  disconnect: [DeptManagerWhereUniqueInput!]
+  update: [DeptManagerUpdateWithWhereUniqueWithoutEmpNoInput!]
+  upsert: [DeptManagerUpsertWithWhereUniqueWithoutEmpNoInput!]
+  deleteMany: [DeptManagerScalarWhereInput!]
+  updateMany: [DeptManagerUpdateManyWithWhereNestedInput!]
+}
+
+input DeptManagerUpdateManyWithWhereNestedInput {
+  where: DeptManagerScalarWhereInput!
+  data: DeptManagerUpdateManyDataInput!
+}
+
+input DeptManagerUpdateWithoutDeptNoDataInput {
+  empNo: EmployeeUpdateOneRequiredWithoutDeptManagersInput
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptManagerUpdateWithoutEmpNoDataInput {
+  deptNo: DepartmentUpdateOneRequiredWithoutDeptManagersInput
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input DeptManagerUpdateWithWhereUniqueWithoutDeptNoInput {
+  where: DeptManagerWhereUniqueInput!
+  data: DeptManagerUpdateWithoutDeptNoDataInput!
+}
+
+input DeptManagerUpdateWithWhereUniqueWithoutEmpNoInput {
+  where: DeptManagerWhereUniqueInput!
+  data: DeptManagerUpdateWithoutEmpNoDataInput!
+}
+
+input DeptManagerUpsertWithWhereUniqueWithoutDeptNoInput {
+  where: DeptManagerWhereUniqueInput!
+  update: DeptManagerUpdateWithoutDeptNoDataInput!
+  create: DeptManagerCreateWithoutDeptNoInput!
+}
+
+input DeptManagerUpsertWithWhereUniqueWithoutEmpNoInput {
+  where: DeptManagerWhereUniqueInput!
+  update: DeptManagerUpdateWithoutEmpNoDataInput!
+  create: DeptManagerCreateWithoutEmpNoInput!
 }
 
 input DeptManagerWhereInput {
@@ -484,6 +661,10 @@ type Employee {
   gender: EmployeesGenderEnum!
   hireDate: DateTime!
   lastName: String!
+  deptEmp(where: DeptEmpWhereInput, orderBy: DeptEmpOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DeptEmp!]
+  deptManagers(where: DeptManagerWhereInput, orderBy: DeptManagerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DeptManager!]
+  salaries(where: SalaryWhereInput, orderBy: SalaryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Salary!]
+  titles(where: TitleWhereInput, orderBy: TitleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Title!]
 }
 
 type EmployeeConnection {
@@ -499,11 +680,78 @@ input EmployeeCreateInput {
   gender: EmployeesGenderEnum!
   hireDate: DateTime!
   lastName: String!
+  deptEmp: DeptEmpCreateManyWithoutEmpNoInput
+  deptManagers: DeptManagerCreateManyWithoutEmpNoInput
+  salaries: SalaryCreateManyWithoutEmpNoInput
+  titles: TitleCreateManyWithoutEmpNoInput
 }
 
-input EmployeeCreateOneInput {
-  create: EmployeeCreateInput
+input EmployeeCreateOneWithoutDeptEmpInput {
+  create: EmployeeCreateWithoutDeptEmpInput
   connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeCreateOneWithoutDeptManagersInput {
+  create: EmployeeCreateWithoutDeptManagersInput
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeCreateOneWithoutSalariesInput {
+  create: EmployeeCreateWithoutSalariesInput
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeCreateOneWithoutTitlesInput {
+  create: EmployeeCreateWithoutTitlesInput
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeCreateWithoutDeptEmpInput {
+  emp_no: Int
+  birthDate: DateTime!
+  firstName: String!
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime!
+  lastName: String!
+  deptManagers: DeptManagerCreateManyWithoutEmpNoInput
+  salaries: SalaryCreateManyWithoutEmpNoInput
+  titles: TitleCreateManyWithoutEmpNoInput
+}
+
+input EmployeeCreateWithoutDeptManagersInput {
+  emp_no: Int
+  birthDate: DateTime!
+  firstName: String!
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime!
+  lastName: String!
+  deptEmp: DeptEmpCreateManyWithoutEmpNoInput
+  salaries: SalaryCreateManyWithoutEmpNoInput
+  titles: TitleCreateManyWithoutEmpNoInput
+}
+
+input EmployeeCreateWithoutSalariesInput {
+  emp_no: Int
+  birthDate: DateTime!
+  firstName: String!
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime!
+  lastName: String!
+  deptEmp: DeptEmpCreateManyWithoutEmpNoInput
+  deptManagers: DeptManagerCreateManyWithoutEmpNoInput
+  titles: TitleCreateManyWithoutEmpNoInput
+}
+
+input EmployeeCreateWithoutTitlesInput {
+  emp_no: Int
+  birthDate: DateTime!
+  firstName: String!
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime!
+  lastName: String!
+  deptEmp: DeptEmpCreateManyWithoutEmpNoInput
+  deptManagers: DeptManagerCreateManyWithoutEmpNoInput
+  salaries: SalaryCreateManyWithoutEmpNoInput
 }
 
 type EmployeeEdge {
@@ -558,20 +806,16 @@ input EmployeeSubscriptionWhereInput {
   NOT: [EmployeeSubscriptionWhereInput!]
 }
 
-input EmployeeUpdateDataInput {
-  birthDate: DateTime
-  firstName: String
-  gender: EmployeesGenderEnum
-  hireDate: DateTime
-  lastName: String
-}
-
 input EmployeeUpdateInput {
   birthDate: DateTime
   firstName: String
   gender: EmployeesGenderEnum
   hireDate: DateTime
   lastName: String
+  deptEmp: DeptEmpUpdateManyWithoutEmpNoInput
+  deptManagers: DeptManagerUpdateManyWithoutEmpNoInput
+  salaries: SalaryUpdateManyWithoutEmpNoInput
+  titles: TitleUpdateManyWithoutEmpNoInput
 }
 
 input EmployeeUpdateManyMutationInput {
@@ -582,16 +826,96 @@ input EmployeeUpdateManyMutationInput {
   lastName: String
 }
 
-input EmployeeUpdateOneRequiredInput {
-  create: EmployeeCreateInput
-  update: EmployeeUpdateDataInput
-  upsert: EmployeeUpsertNestedInput
+input EmployeeUpdateOneRequiredWithoutDeptEmpInput {
+  create: EmployeeCreateWithoutDeptEmpInput
+  update: EmployeeUpdateWithoutDeptEmpDataInput
+  upsert: EmployeeUpsertWithoutDeptEmpInput
   connect: EmployeeWhereUniqueInput
 }
 
-input EmployeeUpsertNestedInput {
-  update: EmployeeUpdateDataInput!
-  create: EmployeeCreateInput!
+input EmployeeUpdateOneRequiredWithoutDeptManagersInput {
+  create: EmployeeCreateWithoutDeptManagersInput
+  update: EmployeeUpdateWithoutDeptManagersDataInput
+  upsert: EmployeeUpsertWithoutDeptManagersInput
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeUpdateOneRequiredWithoutSalariesInput {
+  create: EmployeeCreateWithoutSalariesInput
+  update: EmployeeUpdateWithoutSalariesDataInput
+  upsert: EmployeeUpsertWithoutSalariesInput
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeUpdateOneRequiredWithoutTitlesInput {
+  create: EmployeeCreateWithoutTitlesInput
+  update: EmployeeUpdateWithoutTitlesDataInput
+  upsert: EmployeeUpsertWithoutTitlesInput
+  connect: EmployeeWhereUniqueInput
+}
+
+input EmployeeUpdateWithoutDeptEmpDataInput {
+  birthDate: DateTime
+  firstName: String
+  gender: EmployeesGenderEnum
+  hireDate: DateTime
+  lastName: String
+  deptManagers: DeptManagerUpdateManyWithoutEmpNoInput
+  salaries: SalaryUpdateManyWithoutEmpNoInput
+  titles: TitleUpdateManyWithoutEmpNoInput
+}
+
+input EmployeeUpdateWithoutDeptManagersDataInput {
+  birthDate: DateTime
+  firstName: String
+  gender: EmployeesGenderEnum
+  hireDate: DateTime
+  lastName: String
+  deptEmp: DeptEmpUpdateManyWithoutEmpNoInput
+  salaries: SalaryUpdateManyWithoutEmpNoInput
+  titles: TitleUpdateManyWithoutEmpNoInput
+}
+
+input EmployeeUpdateWithoutSalariesDataInput {
+  birthDate: DateTime
+  firstName: String
+  gender: EmployeesGenderEnum
+  hireDate: DateTime
+  lastName: String
+  deptEmp: DeptEmpUpdateManyWithoutEmpNoInput
+  deptManagers: DeptManagerUpdateManyWithoutEmpNoInput
+  titles: TitleUpdateManyWithoutEmpNoInput
+}
+
+input EmployeeUpdateWithoutTitlesDataInput {
+  birthDate: DateTime
+  firstName: String
+  gender: EmployeesGenderEnum
+  hireDate: DateTime
+  lastName: String
+  deptEmp: DeptEmpUpdateManyWithoutEmpNoInput
+  deptManagers: DeptManagerUpdateManyWithoutEmpNoInput
+  salaries: SalaryUpdateManyWithoutEmpNoInput
+}
+
+input EmployeeUpsertWithoutDeptEmpInput {
+  update: EmployeeUpdateWithoutDeptEmpDataInput!
+  create: EmployeeCreateWithoutDeptEmpInput!
+}
+
+input EmployeeUpsertWithoutDeptManagersInput {
+  update: EmployeeUpdateWithoutDeptManagersDataInput!
+  create: EmployeeCreateWithoutDeptManagersInput!
+}
+
+input EmployeeUpsertWithoutSalariesInput {
+  update: EmployeeUpdateWithoutSalariesDataInput!
+  create: EmployeeCreateWithoutSalariesInput!
+}
+
+input EmployeeUpsertWithoutTitlesInput {
+  update: EmployeeUpdateWithoutTitlesDataInput!
+  create: EmployeeCreateWithoutTitlesInput!
 }
 
 input EmployeeWhereInput {
@@ -651,6 +975,18 @@ input EmployeeWhereInput {
   lastName_not_starts_with: String
   lastName_ends_with: String
   lastName_not_ends_with: String
+  deptEmp_every: DeptEmpWhereInput
+  deptEmp_some: DeptEmpWhereInput
+  deptEmp_none: DeptEmpWhereInput
+  deptManagers_every: DeptManagerWhereInput
+  deptManagers_some: DeptManagerWhereInput
+  deptManagers_none: DeptManagerWhereInput
+  salaries_every: SalaryWhereInput
+  salaries_some: SalaryWhereInput
+  salaries_none: SalaryWhereInput
+  titles_every: TitleWhereInput
+  titles_some: TitleWhereInput
+  titles_none: TitleWhereInput
   AND: [EmployeeWhereInput!]
   OR: [EmployeeWhereInput!]
   NOT: [EmployeeWhereInput!]
@@ -756,7 +1092,19 @@ type SalaryConnection {
 
 input SalaryCreateInput {
   id: Int
-  empNo: EmployeeCreateOneInput!
+  empNo: EmployeeCreateOneWithoutSalariesInput!
+  fromDate: DateTime!
+  salary: Int!
+  toDate: DateTime!
+}
+
+input SalaryCreateManyWithoutEmpNoInput {
+  create: [SalaryCreateWithoutEmpNoInput!]
+  connect: [SalaryWhereUniqueInput!]
+}
+
+input SalaryCreateWithoutEmpNoInput {
+  id: Int
   fromDate: DateTime!
   salary: Int!
   toDate: DateTime!
@@ -785,6 +1133,44 @@ type SalaryPreviousValues {
   toDate: DateTime!
 }
 
+input SalaryScalarWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  fromDate: DateTime
+  fromDate_not: DateTime
+  fromDate_in: [DateTime!]
+  fromDate_not_in: [DateTime!]
+  fromDate_lt: DateTime
+  fromDate_lte: DateTime
+  fromDate_gt: DateTime
+  fromDate_gte: DateTime
+  salary: Int
+  salary_not: Int
+  salary_in: [Int!]
+  salary_not_in: [Int!]
+  salary_lt: Int
+  salary_lte: Int
+  salary_gt: Int
+  salary_gte: Int
+  toDate: DateTime
+  toDate_not: DateTime
+  toDate_in: [DateTime!]
+  toDate_not_in: [DateTime!]
+  toDate_lt: DateTime
+  toDate_lte: DateTime
+  toDate_gt: DateTime
+  toDate_gte: DateTime
+  AND: [SalaryScalarWhereInput!]
+  OR: [SalaryScalarWhereInput!]
+  NOT: [SalaryScalarWhereInput!]
+}
+
 type SalarySubscriptionPayload {
   mutation: MutationType!
   node: Salary
@@ -804,7 +1190,13 @@ input SalarySubscriptionWhereInput {
 }
 
 input SalaryUpdateInput {
-  empNo: EmployeeUpdateOneRequiredInput
+  empNo: EmployeeUpdateOneRequiredWithoutSalariesInput
+  fromDate: DateTime
+  salary: Int
+  toDate: DateTime
+}
+
+input SalaryUpdateManyDataInput {
   fromDate: DateTime
   salary: Int
   toDate: DateTime
@@ -814,6 +1206,40 @@ input SalaryUpdateManyMutationInput {
   fromDate: DateTime
   salary: Int
   toDate: DateTime
+}
+
+input SalaryUpdateManyWithoutEmpNoInput {
+  create: [SalaryCreateWithoutEmpNoInput!]
+  delete: [SalaryWhereUniqueInput!]
+  connect: [SalaryWhereUniqueInput!]
+  set: [SalaryWhereUniqueInput!]
+  disconnect: [SalaryWhereUniqueInput!]
+  update: [SalaryUpdateWithWhereUniqueWithoutEmpNoInput!]
+  upsert: [SalaryUpsertWithWhereUniqueWithoutEmpNoInput!]
+  deleteMany: [SalaryScalarWhereInput!]
+  updateMany: [SalaryUpdateManyWithWhereNestedInput!]
+}
+
+input SalaryUpdateManyWithWhereNestedInput {
+  where: SalaryScalarWhereInput!
+  data: SalaryUpdateManyDataInput!
+}
+
+input SalaryUpdateWithoutEmpNoDataInput {
+  fromDate: DateTime
+  salary: Int
+  toDate: DateTime
+}
+
+input SalaryUpdateWithWhereUniqueWithoutEmpNoInput {
+  where: SalaryWhereUniqueInput!
+  data: SalaryUpdateWithoutEmpNoDataInput!
+}
+
+input SalaryUpsertWithWhereUniqueWithoutEmpNoInput {
+  where: SalaryWhereUniqueInput!
+  update: SalaryUpdateWithoutEmpNoDataInput!
+  create: SalaryCreateWithoutEmpNoInput!
 }
 
 input SalaryWhereInput {
@@ -884,7 +1310,19 @@ type TitleConnection {
 
 input TitleCreateInput {
   id: Int
-  empNo: EmployeeCreateOneInput!
+  empNo: EmployeeCreateOneWithoutTitlesInput!
+  fromDate: DateTime!
+  title: String!
+  toDate: DateTime
+}
+
+input TitleCreateManyWithoutEmpNoInput {
+  create: [TitleCreateWithoutEmpNoInput!]
+  connect: [TitleWhereUniqueInput!]
+}
+
+input TitleCreateWithoutEmpNoInput {
+  id: Int
   fromDate: DateTime!
   title: String!
   toDate: DateTime
@@ -913,6 +1351,50 @@ type TitlePreviousValues {
   toDate: DateTime
 }
 
+input TitleScalarWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  fromDate: DateTime
+  fromDate_not: DateTime
+  fromDate_in: [DateTime!]
+  fromDate_not_in: [DateTime!]
+  fromDate_lt: DateTime
+  fromDate_lte: DateTime
+  fromDate_gt: DateTime
+  fromDate_gte: DateTime
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  toDate: DateTime
+  toDate_not: DateTime
+  toDate_in: [DateTime!]
+  toDate_not_in: [DateTime!]
+  toDate_lt: DateTime
+  toDate_lte: DateTime
+  toDate_gt: DateTime
+  toDate_gte: DateTime
+  AND: [TitleScalarWhereInput!]
+  OR: [TitleScalarWhereInput!]
+  NOT: [TitleScalarWhereInput!]
+}
+
 type TitleSubscriptionPayload {
   mutation: MutationType!
   node: Title
@@ -932,7 +1414,13 @@ input TitleSubscriptionWhereInput {
 }
 
 input TitleUpdateInput {
-  empNo: EmployeeUpdateOneRequiredInput
+  empNo: EmployeeUpdateOneRequiredWithoutTitlesInput
+  fromDate: DateTime
+  title: String
+  toDate: DateTime
+}
+
+input TitleUpdateManyDataInput {
   fromDate: DateTime
   title: String
   toDate: DateTime
@@ -942,6 +1430,40 @@ input TitleUpdateManyMutationInput {
   fromDate: DateTime
   title: String
   toDate: DateTime
+}
+
+input TitleUpdateManyWithoutEmpNoInput {
+  create: [TitleCreateWithoutEmpNoInput!]
+  delete: [TitleWhereUniqueInput!]
+  connect: [TitleWhereUniqueInput!]
+  set: [TitleWhereUniqueInput!]
+  disconnect: [TitleWhereUniqueInput!]
+  update: [TitleUpdateWithWhereUniqueWithoutEmpNoInput!]
+  upsert: [TitleUpsertWithWhereUniqueWithoutEmpNoInput!]
+  deleteMany: [TitleScalarWhereInput!]
+  updateMany: [TitleUpdateManyWithWhereNestedInput!]
+}
+
+input TitleUpdateManyWithWhereNestedInput {
+  where: TitleScalarWhereInput!
+  data: TitleUpdateManyDataInput!
+}
+
+input TitleUpdateWithoutEmpNoDataInput {
+  fromDate: DateTime
+  title: String
+  toDate: DateTime
+}
+
+input TitleUpdateWithWhereUniqueWithoutEmpNoInput {
+  where: TitleWhereUniqueInput!
+  data: TitleUpdateWithoutEmpNoDataInput!
+}
+
+input TitleUpsertWithWhereUniqueWithoutEmpNoInput {
+  where: TitleWhereUniqueInput!
+  update: TitleUpdateWithoutEmpNoDataInput!
+  create: TitleCreateWithoutEmpNoInput!
 }
 
 input TitleWhereInput {

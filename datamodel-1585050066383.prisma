@@ -1,0 +1,55 @@
+type Department @db(name: "departments") {
+  dept_no: ID! @id
+  deptName: String! @db(name: "dept_name") @unique
+}
+
+type DeptEmp @db(name: "dept_emp") {
+  # Multiple ID fields (compound indexes) are not supported
+  # deptNo: ID! @db(name: "dept_no") @id
+  # Multiple ID fields (compound indexes) are not supported
+  # empNo: Int! @db(name: "emp_no") @id
+  fromDate: DateTime! @db(name: "from_date")
+  toDate: DateTime! @db(name: "to_date")
+}
+
+type DeptManager @db(name: "dept_manager") {
+  # Multiple ID fields (compound indexes) are not supported
+  # deptNo: ID! @db(name: "dept_no") @id
+  # Multiple ID fields (compound indexes) are not supported
+  # empNo: Int! @db(name: "emp_no") @id
+  fromDate: DateTime! @db(name: "from_date")
+  toDate: DateTime! @db(name: "to_date")
+}
+
+type Employee @db(name: "employees") {
+  emp_no: Int! @id
+  birthDate: DateTime! @db(name: "birth_date")
+  firstName: String! @db(name: "first_name")
+  gender: EmployeesGenderEnum!
+  hireDate: DateTime! @db(name: "hire_date")
+  lastName: String! @db(name: "last_name")
+}
+
+enum EmployeesGenderEnum {
+  F
+  M
+}
+
+type Salary @db(name: "salaries") {
+  # Multiple ID fields (compound indexes) are not supported
+  # empNo: Int! @db(name: "emp_no") @id
+  # Multiple ID fields (compound indexes) are not supported
+  # fromDate: DateTime! @db(name: "from_date") @id
+  salary: Int!
+  toDate: DateTime! @db(name: "to_date")
+}
+
+type Title @db(name: "titles") {
+  # Multiple ID fields (compound indexes) are not supported
+  # empNo: Int! @db(name: "emp_no") @id
+  # Multiple ID fields (compound indexes) are not supported
+  # fromDate: DateTime! @db(name: "from_date") @id
+  # Multiple ID fields (compound indexes) are not supported
+  # title: ID! @id
+  toDate: DateTime @db(name: "to_date")
+}

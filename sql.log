@@ -1,0 +1,297 @@
+{
+  employee(where:{emp_no:10001}) {
+    deptEmp {
+      deptNo {
+        deptManagers {
+          empNo {
+            emp_no
+            firstName
+            lastName
+          }
+        }
+        deptName
+      }
+    }
+  }
+}
+
+{
+  "data": {
+    "employee": {
+      "deptEmp": [
+        {
+          "deptNo": {
+            "deptManagers": [
+              {
+                "empNo": {
+                  "emp_no": 110511,
+                  "firstName": "DeForest",
+                  "lastName": "Hagimont"
+                }
+              },
+              {
+                "empNo": {
+                  "emp_no": 110567,
+                  "firstName": "Leon",
+                  "lastName": "DasSarma"
+                }
+              }
+            ],
+            "deptName": "Development"
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+select `prism_app@devel`.`employees`.`emp_no`
+from `prism_app@devel`.`employees`
+where `prism_app@devel`.`employees`.`emp_no` = 10001
+
+select
+  `Alias`.`id`,
+  `Alias`.`dept_no`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`emp_no` as `__ParentModel__`
+from `prism_app@devel`.`dept_emp` as `Alias`
+  join `prism_app@devel`.`dept_emp` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`emp_no` in (10001)
+order by `RelationTable`.`id` asc
+
+select
+  `Alias`.`dept_name`,
+  `Alias`.`dept_no`
+from `prism_app@devel`.`departments` as `Alias`
+where `Alias`.`dept_no` in ('d005')
+order by `Alias`.`dept_no` asc
+limit 2147483647
+offset 0
+
+select
+  `Alias`.`id`,
+  `Alias`.`emp_no`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`dept_no` as `__ParentModel__`
+from `prism_app@devel`.`dept_manager` as `Alias`
+  join `prism_app@devel`.`dept_manager` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`dept_no` in ('d005')
+order by `RelationTable`.`id` asc
+
+select
+  `Alias`.`emp_no`,
+  `Alias`.`first_name`,
+  `Alias`.`last_name`
+from `prism_app@devel`.`employees` as `Alias`
+where `Alias`.`emp_no` in (
+  110511, 110567
+)
+order by `Alias`.`emp_no` asc
+limit 2147483647
+offset 0
+
+{
+  employees(first: 20) {
+    titles {
+      title
+    }
+  }
+}
+
+{
+  "data": {
+    "employees": [
+      {
+        "titles": [
+          {
+            "title": "Senior Engineer"
+          },
+          {
+            "title": "Rock Master"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Senior Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Engineer"
+          },
+          {
+            "title": "Senior Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Senior Staff"
+          },
+          {
+            "title": "Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Senior Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Senior Staff"
+          },
+          {
+            "title": "Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Assistant Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Assistant Engineer"
+          },
+          {
+            "title": "Engineer"
+          },
+          {
+            "title": "Senior Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Engineer"
+          },
+          {
+            "title": "Senior Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Senior Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Senior Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Senior Staff"
+          },
+          {
+            "title": "Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Engineer"
+          },
+          {
+            "title": "Senior Engineer"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Staff"
+          }
+        ]
+      },
+      {
+        "titles": [
+          {
+            "title": "Engineer"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+select `Alias`.`emp_no`
+from `prism_app@devel`.`employees` as `Alias`
+where 1 = 1
+order by `Alias`.`emp_no` asc
+limit 21
+offset 0
+
+select
+  `Alias`.`title`,
+  `Alias`.`id`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`emp_no` as `__ParentModel__`
+from `prism_app@devel`.`titles` as `Alias`
+  join `prism_app@devel`.`titles` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`emp_no` in (
+  10001, 10002, 10003, 10004, 10005, 10006, 10007, 10008, 10009, 10010, 10011, 10012, 10013, 10014, 10015, 10016, 10017, 10018, 10019, 10020
+)
+order by `RelationTable`.`id` asc
