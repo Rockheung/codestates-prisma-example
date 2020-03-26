@@ -16,14 +16,14 @@ mysqldump \
 --complete-insert \
 --add-drop-database \
 --set-gtid-purged=OFF \
---databases "samples" \
---host=127.0.0.1 \
+--databases "$SRC_DB_NAME" \
+--host=$DB_HOST \
 --user=$DB_USER \
 --password=$DB_PASS \
 --port=$DB_PORT \
 > $DUMP_FILE
 
-sed -i_ "s/samples/$DB_NAME@$STAGING/g" $DUMP_FILE
+sed -i_ "s/$SRC_DB_NAME/$DB_NAME@$STAGING/g" $DUMP_FILE
 
 mysql \
 --host=127.0.0.1 \

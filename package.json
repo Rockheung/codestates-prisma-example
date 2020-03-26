@@ -4,12 +4,14 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "postinstall": "bash preinstall.sh",
+    "postinstall": "dotenv -- bash postinstall.sh",
     "start": "dotenv -- node app.js",
     "db:start": "dotenv -- docker-compose up -d",
+    "db:status": "dotenv -- docker-compose logs -f",
     "db:kill": "dotenv -- docker-compose down && rm -rf .mysql",
     "db:migration": "dotenv -- prisma deploy",
     "db:load": "dotenv -- bash -c 'mysql -h 127.0.0.1 -P $DB_PORT -u root -p$DB_PASS < employees_db/employees.sql'",
+    "db:introspect": "npx dotenv -- bash -c 'prisma introspect --mysql-host $DB_HOST --mysql-port $DB_PORT --mysql-db $SRC_DB_NAME --mysql-user $DB_USER --mysql-password $DB_PASS'",
     "token": "dotenv -- prisma token",
     "token:dev": "dotenv -- prisma cluster-token"
   },
@@ -23,7 +25,6 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "prisma-binding": "^2.3.16",
-    "zongji": "^0.5.1"
+    "prisma-binding": "^2.3.16"
   }
 }
