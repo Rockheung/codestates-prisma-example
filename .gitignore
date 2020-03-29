@@ -1,7 +1,7 @@
 node_modules
-.tmp
 .logs
 .mysql
+.dump
 employees_db-full.tar.bz2
 employees_db
 

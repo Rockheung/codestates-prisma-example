@@ -5,7 +5,10 @@ if ! [ -x "$(command -v mysqldump)" ]; then
   exit 1
 fi
 
-DUMP_FILE=dump_$DB_NAME\_$(date +"%Y%m%d").dump
+
+mkdir -p .dump
+
+DUMP_FILE=.dump/dump_$DB_NAME\_$(date +"%Y%m%d%H%M").dump
 
 mysqldump \
 --column-statistics=0 \
@@ -31,6 +34,3 @@ mysql \
 --password=$DB_PASS \
 --port=$DB_PORT \
 < $DUMP_FILE
-
-mkdir -p .tmp
-mv $DUMP_FILE $DUMP_FILE\_ .tmp
