@@ -83,7 +83,7 @@ CREATE TABLE employees (
 );
 ```
 
-```
+```prisma
 type Employee @db(name: "employees") {
   emp_no:    Int!             @id
   birthDate: DateTime!        @db(name: "birth_date")
@@ -108,7 +108,7 @@ CREATE TABLE dept_manager (
 
 위 테이블에 대한 prisma의 introspect 데이터모델은 다음과 같다. 바로 사용할 수 없는 형태이다.
 
-```
+```prisma
 type DeptManager @db(name: "dept_manager") {
   # Multiple ID fields (compound indexes) are not supported
   # emp_no: Int! @id
@@ -121,7 +121,7 @@ type DeptManager @db(name: "dept_manager") {
 
 이유는 위 테이블이 복합키(composite primary key)를 사용하고 있기 때문이다.Prisma는 이를 허용하지 않는데, 2개의 pk column은 2개의 @id directive로 변환된다. 다행히 이 테이블의 역할을 고민하면 굳이 복합키를 고민할 필요는 없다는 결론에 도달한다. pk로 사용되는 각각의 칼럼은 fk의 역할을 하고 있다. 다음과 같이 바꿔주자.
 
-```
+```prisma
 type DeptManager @db(name: "dept_manager") {
   id: Int! @id
   deptNo: Department! @db(name: "dept_no") @relation(link: INLINE)
@@ -137,7 +137,7 @@ Int 타입 id 필드를 추가하여 pk가 되도록 했고, 원래 데이터에
 
 아까 하다 만 얘기가 있다. 타입에 임의의 필드를 정의하는 경우다. 위의 예시에서 DeptManager 하위에 Employee 필드를 만들었다. 이는 결과적으로 Employee Resolver와 이어진다. 그렇다면 Employee에서 자신을 향하는 DeptManager들은 어떻게 Resolve할 수 있는가? 이는 다음과 같은 데이터모델 정의를 통해 가능하다.
 
-```
+```prisma
 type Employee @db(name: "employees") {
   emp_no: Int! @id
   birthDate: DateTime! @db(name: "birth_date")
@@ -151,7 +151,7 @@ type Employee @db(name: "employees") {
 
 위 타입에서 deptManagers 필드는 실제로 데이터베이스에 생성되는 Column이 아니다. 하지만 위의 datamodel은 결과적으로 다음과 같은 Query를 가능하게 한다.
 
-```
+```GraphQL
 query ($id: Int){
   employee(where: {emp_no: $id}) {
     deptManagers {
@@ -231,7 +231,7 @@ playground가 열리는데, 좌하단의 HTTP HEADERS를 클릭하여 연 후에
 
 이제 가능한 쿼리들을 DOCS 에서 확인할 수 있다. 데이터베이스에서 원하는 종류의 데이터를 잘 가져올 수 있는지 확인해보자. 먼저, employees는 잘 있을까? 어떤 sql문으로 데이터를 불러오는지도 로그를 통해 확인해보자.
 
-```
+```GraphQL
 {
   employees(first: 3) {
     emp_no
@@ -279,7 +279,7 @@ offset 0
 
 평소에 Georgi에 관심이 있어서 그의 성별과 부서를 확인해 보려 한다.
 
-```
+```GraphQL
 {
   employee(where: {emp_no: 10001}) {
     emp_no
