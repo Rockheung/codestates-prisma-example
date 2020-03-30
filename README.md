@@ -1,6 +1,9 @@
 # 코드스테이츠 2020년 3월 온라인 기술세미나 (3/31) - 다 된 DB에 Prisma 얹기
 
 
+###### 이 글은 판단이 아닌, '이런 게 가능하더라'는 정보 전달에 목적이 있습니다.
+
+
 ## TL;DR
 
 Database(samples)를 Mysql에 집어넣고 `prisma introspect`로 `datamodel.prisma`를 생성하여 알맞게 변형시킨다. 이를 기반으로 `prisma deploy` 로 새로운 Database(prism_app@devel)를 생성한다. Database(samples)에서 Database(prism_app@devel)로 dump한다.
@@ -94,7 +97,7 @@ type Employee @db(name: "employees") {
 }
 ```
 
-반대로 다음과 같이 명료하지 않은 테이블도 있는데, 다음을 보자.
+이와는 다르게 명료하지 않은 테이블도 있는데, 다음을 보자.
 
 ```SQL
 CREATE TABLE dept_manager (
@@ -131,7 +134,7 @@ type DeptManager @db(name: "dept_manager") {
 }
 ```
 
-Int 타입 id 필드를 추가하여 pk가 되도록 했고, 원래 데이터에는 해당 필드가 없지만 후에`INSERT`로 밀어넣을 때 자동으로 pk가 생성된다. 
+Int 타입 id 필드를 추가하여 pk가 되도록 했고, 원래 데이터에는 해당 필드가 없지만 후에 `INSERT`로 밀어넣을 때 자동으로 pk가 생성된다(mysqldump로 생성할 dump파일은 후에 알게 되겠지만 사실 거대한 INSERT SQL구문이다). 
 
 의아한 부분이 있다. `Int` 타입이 `Employee` 타입으로 바뀌었다. 이는 prisma에서 관계를 정의할 때 사용하는 방식이다. 위 Column은 이제 employees 테이블과의 fk로 사용된다. 
 
@@ -160,6 +163,12 @@ query ($id: Int){
     }
   }
 }
+
+{
+  "variables": {
+    "id": 00000
+  }
+}
 ```
 
 이에 대한 결과값은 다음과 같을 것이다.
@@ -181,7 +190,7 @@ query ($id: Int){
 
 위와 같은 방식으로 1:N의 관계를 각각의 타입에 필요에 따라 정의하면 된다. 
 
-자세한 관계 정의 방법은 여기서 좀 더 볼 수 있다. 
+자세한 관계 정의 방법은 여기서 좀 더 찾아볼 수 있다. 
 
 [=> Official Prisma Docs: Datamodel & Migration: Relation](https://www.prisma.io/docs/datamodel-and-migrations/datamodel-MYSQL-knul/#relations)
 
