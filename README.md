@@ -350,9 +350,8 @@ offset 0;
 
 아쉽게도 Georgi는 남자였다.
 
-## ... Step More
 
-앞서 사용한 토큰의 payload를 살펴보면 유효 기간이 일주일밖에 되지 않는다. 만약 스크립트 자동화에 사용하고자 한다면, 그리고 바꾸기 귀찮고 서버사이드에서 사용할 목적이라면 다음을 통해 더 긴 유효기간인 키를 발급받아 사용하면 된다. 이 키는 참고로 유효기간이 5년이다.
+...앞서 사용한 토큰의 payload를 살펴보면 유효 기간이 일주일밖에 되지 않는다. 만약 스크립트 자동화에 사용하고자 한다면, 그리고 바꾸기 귀찮고 서버사이드에서 사용할 목적이라면 다음을 통해 더 긴 유효기간인 키를 발급받아 사용하면 된다. 이 키는 참고로 유효기간이 5년이다.
 
 ```bash
 # npm run token:dev
@@ -377,6 +376,317 @@ http://127.0.0.1:8446/management
 다음 문서에서 좀 더 자세한 정보를 볼 수 있다.
 
 [=> Official Prisma Docs: The Management API](https://www.prisma.io/docs/prisma-server/management-api-foe1/)
+
+
+## Step Five
+
+dept_emp 테이블은 사실 employees 테이블과 departments 테이블간의 M:N관계를 나타낸다. 간단히 살펴보자.
+
+앞서 별 관심은 없지만 성별을 알 수 있었던 Georgi가 개발(Development) 부서인 것은 알게 되었다. 그 부서의 deptManager는 누구인가? 1:N의 관계로 맺어져 있는데 부서장은 한 명이어야 하는 것 아닌가? 데이터의 형태를 알아보고자 다음과 같은 쿼리를 날려보았다.
+
+```graphql
+{
+  employee(where: {emp_no: 10001}) {
+    emp_no
+    firstName
+    lastName
+    titles {
+      title
+      fromDate
+      toDate
+    }
+    deptEmp {
+      deptNo {
+        dept_no
+        deptName
+        deptManagers {
+          fromDate
+          toDate
+          empNo {
+            emp_no
+            firstName
+            lastName
+            hireDate
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+```sql
+select
+  `prism_app@devel`.`employees`.`first_name`,
+  `prism_app@devel`.`employees`.`last_name`,
+  `prism_app@devel`.`employees`.`emp_no`
+from `prism_app@devel`.`employees`
+where `prism_app@devel`.`employees`.`emp_no` = 10001
+
+select
+  `Alias`.`id`,
+  `Alias`.`dept_no`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`emp_no` as `__ParentModel__`
+from `prism_app@devel`.`dept_emp` as `Alias`
+  join `prism_app@devel`.`dept_emp` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`emp_no` in (10001)
+order by `RelationTable`.`id` asc
+
+select
+  `Alias`.`from_date`,
+  `Alias`.`title`,
+  `Alias`.`to_date`,
+  `Alias`.`id`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`emp_no` as `__ParentModel__`
+from `prism_app@devel`.`titles` as `Alias`
+  join `prism_app@devel`.`titles` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`emp_no` in (10001)
+order by `RelationTable`.`id` asc
+
+select
+  `Alias`.`dept_no`,
+  `Alias`.`dept_name`
+from `prism_app@devel`.`departments` as `Alias`
+where `Alias`.`dept_no` in ('d005')
+order by `Alias`.`dept_no` asc
+limit 2147483647
+offset 0
+
+select
+  `Alias`.`id`,
+  `Alias`.`to_date`,
+  `Alias`.`from_date`,
+  `Alias`.`emp_no`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`dept_no` as `__ParentModel__`
+from `prism_app@devel`.`dept_manager` as `Alias`
+  join `prism_app@devel`.`dept_manager` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`dept_no` in ('d005')
+order by `RelationTable`.`id` asc
+
+select
+  `Alias`.`emp_no`,
+  `Alias`.`first_name`,
+  `Alias`.`last_name`,
+  `Alias`.`hire_date`
+from `prism_app@devel`.`employees` as `Alias`
+where `Alias`.`emp_no` in (
+  110511, 110567
+)
+order by `Alias`.`emp_no` asc
+limit 2147483647
+offset 0
+```
+
+```json
+{
+  "data": {
+    "employee": {
+      "emp_no": 10001,
+      "titles": [
+        {
+          "title": "Senior Engineer",
+          "fromDate": "1986-06-26T00:00:00.000Z",
+          "toDate": "9999-01-01T00:00:00.000Z"
+        }
+      ],
+      "lastName": "Facello",
+      "firstName": "Georgi",
+      "deptEmp": [
+        {
+          "deptNo": {
+            "dept_no": "d005",
+            "deptName": "Development",
+            "deptManagers": [
+              {
+                "fromDate": "1985-01-01T00:00:00.000Z",
+                "toDate": "1992-04-25T00:00:00.000Z",
+                "empNo": {
+                  "emp_no": 110511,
+                  "firstName": "DeForest",
+                  "lastName": "Hagimont",
+                  "hireDate": "1985-01-01T00:00:00.000Z"
+                }
+              },
+              {
+                "fromDate": "1992-04-25T00:00:00.000Z",
+                "toDate": "9999-01-01T00:00:00.000Z",
+                "empNo": {
+                  "emp_no": 110567,
+                  "firstName": "Leon",
+                  "lastName": "DasSarma",
+                  "hireDate": "1986-10-21T00:00:00.000Z"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+아, 과거의 부서장 또한 기록이 되어 있었다. M:N관계인 것을 납득했다. 또한 마찬가지로 Georgi의 직책 또한 그 변경 이력을 추적할 수 있도록 DB가 구성되어 있음을 알 수 있다. 그렇다면 현재의 직위나 부서장만을 알고 싶다면? Prisma는 이미 계획이 다 있다. 다음과 같이 조건을 걸면 된다. 각 타입별로 어떤 정렬 조건을 걸 수 있는지 Enum으로 미리 정의해 준다. playground의 Docs를 보면 Prisma의 계획을 좀 더 자세히 알 수 있다.
+
+```graphql
+{
+  employee(where: {emp_no: 10001 }) {
+    emp_no
+    firstName
+    lastName
+    titles(orderBy: fromDate_DESC, first:1) {
+      title
+      fromDate
+      toDate
+    }
+    deptEmp {
+      deptNo {
+        dept_no
+        deptName
+        deptManagers(orderBy: fromDate_DESC, first:1) {
+          fromDate
+          toDate
+          empNo {
+            emp_no
+            firstName
+            lastName
+            hireDate
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+```sql
+select
+  `prism_app@devel`.`employees`.`first_name`,
+  `prism_app@devel`.`employees`.`last_name`,
+  `prism_app@devel`.`employees`.`emp_no`
+from `prism_app@devel`.`employees`
+where `prism_app@devel`.`employees`.`emp_no` = 10001
+
+select
+  `Alias`.`id`,
+  `Alias`.`dept_no`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`emp_no` as `__ParentModel__`
+from `prism_app@devel`.`dept_emp` as `Alias`
+  join `prism_app@devel`.`dept_emp` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`emp_no` in (10001)
+order by `RelationTable`.`id` asc
+
+(select
+  `Alias`.`from_date`,
+  `Alias`.`title`,
+  `Alias`.`to_date`,
+  `Alias`.`id`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`emp_no` as `__ParentModel__`
+from `prism_app@devel`.`titles` as `Alias`
+  join `prism_app@devel`.`titles` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`emp_no` = 10001
+order by
+  `from_date` desc,
+  `__RelatedModel__` asc
+limit 2
+offset 0)
+
+select
+  `Alias`.`dept_no`,
+  `Alias`.`dept_name`
+from `prism_app@devel`.`departments` as `Alias`
+where `Alias`.`dept_no` in ('d005')
+order by `Alias`.`dept_no` asc
+limit 2147483647
+offset 0
+
+(select
+  `Alias`.`id`,
+  `Alias`.`to_date`,
+  `Alias`.`from_date`,
+  `Alias`.`emp_no`,
+  `RelationTable`.`id` as `__RelatedModel__`,
+  `RelationTable`.`dept_no` as `__ParentModel__`
+from `prism_app@devel`.`dept_manager` as `Alias`
+  join `prism_app@devel`.`dept_manager` as `RelationTable`
+  on `Alias`.`id` = `RelationTable`.`id`
+where `RelationTable`.`dept_no` = 'd005'
+order by
+  `from_date` desc,
+  `__RelatedModel__` asc
+limit 2
+offset 0)
+
+select
+  `Alias`.`emp_no`,
+  `Alias`.`first_name`,
+  `Alias`.`last_name`,
+  `Alias`.`hire_date`
+from `prism_app@devel`.`employees` as `Alias`
+where `Alias`.`emp_no` in (110567)
+order by `Alias`.`emp_no` asc
+limit 2147483647
+offset 0
+```
+
+```json
+{
+  "data": {
+    "employee": {
+      "emp_no": 10001,
+      "titles": [
+        {
+          "title": "Senior Engineer",
+          "fromDate": "1986-06-26T00:00:00.000Z",
+          "toDate": "9999-01-01T00:00:00.000Z"
+        }
+      ],
+      "lastName": "Facello",
+      "firstName": "Georgi",
+      "deptEmp": [
+        {
+          "deptNo": {
+            "dept_no": "d005",
+            "deptName": "Development",
+            "deptManagers": [
+              {
+                "fromDate": "1992-04-25T00:00:00.000Z",
+                "toDate": "9999-01-01T00:00:00.000Z",
+                "empNo": {
+                  "emp_no": 110567,
+                  "firstName": "Leon",
+                  "lastName": "DasSarma",
+                  "hireDate": "1986-10-21T00:00:00.000Z"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+## Step Further...
+
+지금까지 Prisma를 다 된 DB에 얹어 보았다. 그렇다면 실제로 production 환경에서도 이런 docker container를 띄워 써야 하는가? 혹시 요청이 몰려 다운타임이 발생할 수도 있지 않을까? 이에 대해서는 aws의 fargate를 활용하여 걱정을 덜 수 있지 않을까 한다.
+
+[Github: prisma/prisma-templates](https://github.com/prisma/prisma-templates/blob/master/aws/fargate.yml)
+
+[Prisma Docs (v1.13): AWS Fargate](https://www.prisma.io/docs/1.13/tutorials/deploy-prisma-servers/aws-fargate-joofei3ahd)
+
+이를 이용하면 짧은 기간 내에 로드밸런싱까지 지원하는 백엔드를 구성할 수 있다. 
 
 
 ## Step Reset
